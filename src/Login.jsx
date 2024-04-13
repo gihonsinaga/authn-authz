@@ -1,32 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 import "./index.css";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setemail] = useState("falfareza@binaracademy.org");
+  const [password, setPassword] = useState("Aneh1234");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("localStorage ", localStorage.getItem("token"));
+    if (localStorage.getItem("token") !== null) {
+      alert("Silahkan Logout Terlebih dahulu sebelum login");
+      navigate("/LandingPage");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://dummyjson.com/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://shy-cloud-3319.fly.dev/api/v1/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            expiresInMins: 30,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to login");
       }
       const data = await response.json();
       console.log("Logged in user data: ", data);
+      const { token } = data;
+      localStorage.setItem("token", token);
       window.location.href = "/LandingPage";
     } catch (error) {
       console.error("Login error: ", error);
-      setError("Your Usename and password is wrong");
+      setError("Your email or password is wrong");
     }
   };
 
@@ -42,17 +58,17 @@ function Login() {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
+            htmlFor="email"
           >
-            Username
+            email
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
+            id="email"
             type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="email"
+            value={email}
+            onChange={(e) => setemail(e.target.value)}
           />
         </div>
         <div className="mb-6">
@@ -78,6 +94,13 @@ function Login() {
             type="submit"
           >
             Login
+          </button>
+          <button
+            onClick={() => navigate("/Register")}
+            className="bg-white hover:bg-blue-500 hover:border-white hover:text-white border-black border-2 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Register
           </button>
         </div>
       </form>

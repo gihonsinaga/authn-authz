@@ -13,6 +13,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //convert menggunakan axios
     try {
       const response = await axios.post(
         "https://shy-cloud-3319.fly.dev/api/v1/auth/register",

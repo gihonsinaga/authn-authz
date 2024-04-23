@@ -6,7 +6,7 @@ function LandingPage() {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
 
-  console.log("location ", localStorage.getItem("token"));
+  console.log("token", localStorage.getItem("token"));
 
   useEffect(() => {
     console.log("localStorage ", localStorage.getItem("token"));

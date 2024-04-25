@@ -11,7 +11,7 @@ function LandingPage() {
   useEffect(() => {
     console.log("localStorage ", localStorage.getItem("token"));
     if (localStorage.getItem("token") === null) {
-      alert("silahkan login dulu");
+      // alert("silahkan login dulu"); // error saat alert di klik
       navigate("/");
     }
   }, []);
